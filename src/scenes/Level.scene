@@ -1,0 +1,88 @@
+{
+    "id": "b685c081-ee5f-4b67-b583-415922c9e2c4",
+    "sceneType": "SCENE",
+    "settings": {
+        "exportClass": true,
+        "autoImport": true,
+        "preloadPackFiles": [],
+        "createMethodName": "editorCreate",
+        "sceneKey": "Level",
+        "compilerOutputLanguage": "TYPE_SCRIPT"
+    },
+    "displayList": [
+        {
+            "type": "Image",
+            "id": "a4d381fa-c24b-4600-b1ed-654d04d3b48c",
+            "label": "minecraft_background",
+            "scope": "CLASS",
+            "components": [],
+            "texture": {
+                "key": "minecraft_background"
+            },
+            "x": 399,
+            "y": 303,
+            "scaleX": 1.1919027377667641,
+            "scaleY": 1.7218664581437901
+        },
+        {
+            "type": "Rectangle",
+            "id": "a475da52-f4d4-4568-ab66-969f331cd668",
+            "label": "GameBorder",
+            "scope": "CLASS",
+            "components": [],
+            "x": 390,
+            "y": 290,
+            "isFilled": true,
+            "fillColor": "#61371F",
+            "strokeColor": "#61371F",
+            "lineWidth": 10,
+            "isStroked": true,
+            "width": 333,
+            "height": 333
+        },
+        {
+            "type": "Text",
+            "id": "641eb1b2-9b78-4f14-aa04-fa6fc500fdf5",
+            "label": "GameTitle",
+            "components": [],
+            "x": 146,
+            "y": 4,
+            "text": "Crafting Table",
+            "fontSize": "60px",
+            "fontStyle": "bold",
+            "color": "#000"
+        },
+        {
+            "type": "Text",
+            "id": "a04497d9-a796-4467-b039-a846dc352d78",
+            "label": "ScoreLabel",
+            "components": [],
+            "x": 220,
+            "y": 82,
+            "text": "Score:",
+            "fontFamily": "Verdana",
+            "fontSize": "32px",
+            "color": "#000"
+        },
+        {
+            "type": "Text",
+            "id": "9e296aa3-aa6a-43c5-9037-803def8c1d7c",
+            "label": "score",
+            "scope": "CLASS",
+            "components": [],
+            "x": 330,
+            "y": 83,
+            "text": "0",
+            "fontFamily": "Verdana",
+            "fontSize": "32px",
+            "color": "#000"
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor 2D - Scene Editor",
+        "url": "https://phasereditor2d.com",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 3
+    }
+}

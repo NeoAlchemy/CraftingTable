@@ -76,7 +76,7 @@ export default class Level extends Phaser.Scene {
 
 		this.editorCreate();
 
-		this.createGrid();
+		this.createGrid();		
 
 		this.removeMatches();
 
@@ -89,8 +89,10 @@ export default class Level extends Phaser.Scene {
 		if (this.isEmptySpots()) {
 			this.refillArena()
 		} else {
+		
 			this.removeMatches();
 		}
+		
 	}
 
 
@@ -126,7 +128,10 @@ export default class Level extends Phaser.Scene {
 		this.walkArena((row: number, col: number) => {
 			let image = this.arena[row][col];
 			// if there is no image
-			if (!image || !image.active) {
+			if (!image) {
+				isEmpty = true;
+			} else if (!image.active) {
+				this.arena[row][col] = null;
 				isEmpty = true;
 			}
 		});	  
@@ -180,13 +185,12 @@ export default class Level extends Phaser.Scene {
 				// let aboveTile: any = this.getAboveActiveTile(row, col);
 				let aboveTile = (row != 0) ? this.arena[row - 1][col] : null;
 				if (aboveTile && aboveTile.active) {
-					//let copyAboveTile = this.addImageInArena(aboveTile.col, aboveTile.row, aboveTile.tile.texture.key);
 					var tweenStart: number = this.startTop + ((row-1) * this.interval)
 					var tweenEnd: number = this.startTop + (row * this.interval)
 					var tween = this.tweens.add({
 						targets: [aboveTile],
 						onStart: (tween, target, aboveTile: any) => {
-							// aboveTile.tile.visible = false;	
+							
 						},
 						onStartParams: [aboveTile],
 						y: { from: tweenStart, to: tweenEnd },
@@ -201,9 +205,17 @@ export default class Level extends Phaser.Scene {
 					});
 				} else if (row == 0) {
 					setTimeout(() => {
-						let tile: Phaser.GameObjects.Image = this.addImageInArena(col, row)
-						this.arena[row][col] = tile;
-					}, 0);
+						if (!image || !image.active) {
+							let activeImageHere: Phaser.GameObjects.Image | null = this.getActiveImageHere(col, row);
+							if (!activeImageHere) {
+								let tile: Phaser.GameObjects.Image = this.addImageInArena(col, row)
+								this.arena[row][col] = tile;
+							}
+							this.arena[row][col] = activeImageHere;
+						} else {
+							console.log("is this possible??")
+						}
+					}, 300);
 				}
 			}
 		})
@@ -261,7 +273,9 @@ export default class Level extends Phaser.Scene {
 		if (!texture) {
 			texture = this.getRandomTile()
 		}
-		let tile = this.add.image(this.startLeft + (col * this.interval), this.startTop + (row * this.interval), texture);
+		let x: number = this.startLeft + (col * this.interval);
+		let y: number = this.startTop + (row * this.interval);
+		let tile = this.add.image(x, y, texture);
 		tile.scale = 0.25;
 		tile.depth = 100;
 		tile.setInteractive({draggable: true, dropZone: true});
@@ -274,6 +288,23 @@ export default class Level extends Phaser.Scene {
 		return { row, col };
 	}
 
+	getActiveImageHere(col: number, row: number): Phaser.GameObjects.Image | null {
+		let x: number = this.startLeft + (col * this.interval);
+		let y: number = this.startTop + (row * this.interval);
+		let activeImage: Phaser.GameObjects.Image | null  = null;
+		if (this.children) {
+			let childrenList: any = this.children.getChildren();
+			for (let i=0; i<childrenList.length; i++) {
+				if (childrenList[i] && childrenList[i].type == "Image") {
+					let tile: Phaser.GameObjects.Image = childrenList[i];
+					if (tile.x == x && tile.y == y && tile.active) {
+						activeImage = tile;
+					}
+				}
+			}
+		}
+		return activeImage
+	}
 
 
 	selectTile(pointerEvent: any) {
@@ -382,8 +413,7 @@ export default class Level extends Phaser.Scene {
 		this.switchPhysicalTiles(originTile, targetTile);
 
 		setTimeout(() => {
-
-			if (!this.isMatches()) {
+			if (originTile.active && targetTile.active && !this.isMatches()) {
 				this.switchTilesBack(originTile, targetTile)	
 			}
 
@@ -411,6 +441,8 @@ export default class Level extends Phaser.Scene {
 					let tile = this.arena[row][col]
 					if (tile) {
 						rowString += "[" + tile.texture.key + "] "
+					} else {
+						rowString += "[ ] "
 					}
 				}
 			}
